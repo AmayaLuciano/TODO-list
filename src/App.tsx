@@ -19,6 +19,7 @@ type Todo = {
   completed: boolean;
 };
 
+// Obtener los elementos del localStorage
 const getLocalItems = () => {
   const list = localStorage.getItem('todos');
   if (list) {
@@ -33,19 +34,14 @@ function App() {
   const [items, setItems] = useState<Todo[]>(getLocalItems());
   const [pendingTasks, setPendingTasks] = useState<number>(0);
 
-  useEffect(() => {
-    const storedItems = localStorage.getItem('todos');
-    if (storedItems) {
-      setItems(JSON.parse(storedItems));
-    }
-  }, []);
-
+  // Actualizar el localStorage y el contador de tareas pendientes
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(items));
     const count = items.filter((item) => !item.completed).length;
     setPendingTasks(count);
   }, [items]);
 
+  // Agregar una nueva tarea
   const addTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -60,6 +56,7 @@ function App() {
     setItem('');
   };
 
+  // Marcar una tarea como completa o incompleta
   const completeTask = (id: number) => {
     const updatedItems = items.map((item) => {
       if (item.id === id) {
@@ -73,6 +70,7 @@ function App() {
     setItems(updatedItems);
   };
 
+  // Eliminar una tarea
   const deleteTask = (id: number) => {
     const updatedItems = items.filter((item) => item.id !== id);
     setItems(updatedItems);
